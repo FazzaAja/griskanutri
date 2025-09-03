@@ -1,13 +1,5 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-
-    # Tentukan basis URL. Ini memberitahu server bahwa
-    # semua path relatif harus dimulai dari root domain.
-    RewriteBase /
-
-    # Alihkan semua request yang BUKAN file atau folder yang ada
-    # ke dalam folder /public
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ public/$1 [L]
+    RewriteRule ^$ public/index.php [L]
+    RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
 </IfModule>
