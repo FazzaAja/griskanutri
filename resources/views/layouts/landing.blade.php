@@ -67,7 +67,7 @@
                             <li class="nav-item">
                                 <a href="#" class="nav-link dropdown-toggle" style="padding: 10px">{{ Auth::user()->name }} &#9662;</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Profil</a></li>
+                                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf

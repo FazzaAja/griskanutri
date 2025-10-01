@@ -37,31 +37,7 @@
     {{-- Menu untuk Tampilan Desktop --}}
     <div id="navMenu" class="navbar-menu column is-hidden-touch">
         <div class="navbar-end">
-            @auth
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">
-                    <figure class="image avatar is-32x32">
-                        {{-- Menggunakan accessor avatar_url dari model User --}}
-                        <img class="is-rounded" src="{{ auth()->user()->avatar_url }}">
-                    </figure>
-                    {{-- Menampilkan nama pengguna yang login --}}
-                    &nbsp; Hi, {{ auth()->user()->name }}
-                </a>
-                <div class="navbar-dropdown">
-                    <a class="navbar-item" href="#">
-                        My Profile
-                    </a>
-                    <hr class="navbar-divider">
-                    {{-- Tombol Logout Aman untuk Desktop --}}
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <a class="navbar-item app-logout" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
-                            Logout
-                        </a>
-                    </form>
-                </div>
-            </div>
-            @endauth
+
         </div>
     </div>
     <div id="navMenu" class="navbar-menu column is-hidden-touch">
@@ -82,9 +58,12 @@
                         Settings
                     </a> --}}
                     <hr class="navbar-divider">
-                    <a class="navbar-item app-logout">
-                        Logout
-                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a class="navbar-item app-logout" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
+                            Logout
+                        </a>
+                    </form>
                 </div>
             </div>
         </div>
