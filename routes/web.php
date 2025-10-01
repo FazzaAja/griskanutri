@@ -25,7 +25,7 @@ Route::get('/materi/{materi:slug}/hasil', [LandingPageController::class, 'showRe
 //     return view('welcome');
 // });
 
-// Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('dashboard', [LandingPageController::class, 'dashboard'])->name('dashboard');
     Route::resource('kurikulums', KurikulumController::class);
     Route::resource('materis', MateriController::class);
@@ -38,4 +38,4 @@ Route::get('/materi/{materi:slug}/hasil', [LandingPageController::class, 'showRe
 
     Route::resource('reseps', ResepController::class);
     Route::get('/reseps/autocomplete', [ResepController::class, 'autocomplete'])->name('reseps.autocomplete');
-// });
+});
