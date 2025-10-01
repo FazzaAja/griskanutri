@@ -13,6 +13,8 @@ Route::get('/kurikulum', [LandingPageController::class, 'showKurikulum'])->name(
 Route::get('/materi/{materi:slug}', [LandingPageController::class, 'showMateri'])->name('materi.show');
 Route::get('/jelajah-resep', [LandingPageController::class, 'indexResep'])->name('resep.index');
 Route::get('/resep/{resep:slug}', [LandingPageController::class, 'showResep'])->name('resep.show');
+Route::get('/kalkulator-stunting', [LandingPageController::class, 'showForm'])->name('stunting.form');
+Route::post('/kalkulator-stunting/hitung', [LandingPageController::class, 'calculate'])->name('stunting.calculate');
 
 // Rute untuk Kuis dengan Tampilan Google Form
 Route::get('/materi/{materi:slug}/latihan', [LandingPageController::class, 'showQuiz'])->name('latihan.show');
@@ -22,7 +24,9 @@ Route::get('/materi/{materi:slug}/hasil', [LandingPageController::class, 'showRe
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::middleware('auth')->group(function () {
+
+// Route::middleware('auth')->group(function () {
+    Route::get('dashboard', [LandingPageController::class, 'dashboard'])->name('dashboard');
     Route::resource('kurikulums', KurikulumController::class);
     Route::resource('materis', MateriController::class);
     Route::resource('materis.soals', SoalController::class);
@@ -34,4 +38,4 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('reseps', ResepController::class);
     Route::get('/reseps/autocomplete', [ResepController::class, 'autocomplete'])->name('reseps.autocomplete');
-});
+// });
