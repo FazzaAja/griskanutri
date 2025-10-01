@@ -306,7 +306,7 @@
         </div>
       </section>
 
-      <section class="slogan reveal">
+      <section class="slogan reveal" id="footer">
         <div class="container">
           <h2>Gerak Bersama, Berdampak Nyata</h2>
           <div class="hashtags-grid">

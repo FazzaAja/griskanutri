@@ -3,49 +3,136 @@
 @section('title', 'Edit Kurikulum')
 
 @section('content')
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h3>Edit Kurikulum</h3>
-        <a class="btn btn-primary" href="{{ route('kurikulums.index') }}"> Kembali</a>
+    {{-- Header Halaman --}}
+    <div class="content-header">
+        <h4 class="title is-4">Edit Kurikulum</h4>
+        <span class="separator"></span>
+        <nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="{{ route('kurikulums.index') }}">Kurikulum</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Edit Data</a></li>
+            </ul>
+        </nav>
     </div>
-    <div class="card-body">
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <strong>Ups!</strong> Ada masalah dengan input Anda.<br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
-        <form action="{{ route('kurikulums.update', $kurikulum->id_kurikulum) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
+    {{-- Konten Utama --}}
+    <div class="content-body">
+        <div class="card">
+            <div class="card-content">
+                {{-- Notifikasi Error --}}
+                @if ($errors->any())
+                    <div class="notification is-danger is-light">
+                        <button class="delete"></button>
+                        <strong>Ups!</strong> Ada masalah dengan input Anda:
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-            <div class="mb-3">
-                <label for="nama" class="form-label"><strong>Nama Kurikulum:</strong></label>
-                <input type="text" name="nama" value="{{ $kurikulum->nama }}" class="form-control" placeholder="Nama Kurikulum" required>
+                <form action="{{ route('kurikulums.update', $kurikulum->id_kurikulum) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+
+                    {{-- Field Nama Kurikulum --}}
+                    <div class="field">
+                        <label for="nama" class="label">Nama Kurikulum</label>
+                        <div class="control">
+                            <input type="text" name="nama" class="input @error('nama') is-danger @enderror" value="{{ $kurikulum->nama }}" required>
+                        </div>
+                        @error('nama')
+                            <p class="help is-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Field Keterangan --}}
+                    <div class="field">
+                        <label for="keterangan" class="label">Keterangan</label>
+                        <div class="control">
+                            <textarea class="textarea @error('keterangan') is-danger @enderror" name="keterangan">{{ $kurikulum->keterangan }}</textarea>
+                        </div>
+                         @error('keterangan')
+                            <p class="help is-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Field Gambar --}}
+                    <div class="field">
+                        <label for="img" class="label">Gambar (Cover)</label>
+                        <div class="file has-name">
+                            <label class="file-label">
+                                <input class="file-input" type="file" name="img">
+                                <span class="file-cta">
+                                    <span class="file-icon"><i class="fa fa-upload"></i></span>
+                                    <span class="file-label">Pilih gambar baru…</span>
+                                </span>
+                                <span class="file-name">{{ $kurikulum->img ?? 'Tidak ada file terpilih' }}</span>
+                            </label>
+                        </div>
+                        @if($kurikulum->img)
+                            <p class="help">Biarkan kosong jika tidak ingin mengubah gambar.</p>
+                        @endif
+                        @error('img')
+                            <p class="help is-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Field File --}}
+                     <div class="field">
+                        <label for="file" class="label">File (Silabus/Modul)</label>
+                        <div class="file has-name">
+                            <label class="file-label">
+                                <input class="file-input" type="file" name="file">
+                                <span class="file-cta">
+                                    <span class="file-icon"><i class="fa fa-upload"></i></span>
+                                    <span class="file-label">Pilih file baru…</span>
+                                </span>
+                                <span class="file-name">{{ $kurikulum->file ?? 'Tidak ada file terpilih' }}</span>
+                            </label>
+                        </div>
+                        @if($kurikulum->file)
+                            <p class="help">Biarkan kosong jika tidak ingin mengubah file.</p>
+                        @endif
+                        @error('file')
+                            <p class="help is-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Tombol Aksi --}}
+                    <div class="field is-grouped mt-5">
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Perbarui</button>
+                        </div>
+                        <div class="control">
+                             <a href="{{ route('kurikulums.index') }}" class="button is-text">Batal</a>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                <label for="keterangan" class="form-label"><strong>Keterangan:</strong></label>
-                <textarea class="form-control" style="height:150px" name="keterangan" placeholder="Keterangan">{{ $kurikulum->keterangan }}</textarea>
-            </div>
-            <div class="mb-3">
-                <label for="img" class="form-label"><strong>Gambar (Cover):</strong></label>
-                <input type="file" name="img" class="form-control">
-                @if($kurikulum->img) <small>Gambar saat ini: {{ $kurikulum->img }}</small> @endif
-            </div>
-            <div class="mb-3">
-                <label for="file" class="form-label"><strong>File (Silabus/Modul):</strong></label>
-                <input type="file" name="file" class="form-control">
-                @if($kurikulum->file) <small>File saat ini: {{ $kurikulum->file }}</small> @endif
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Perbarui</button>
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 @endsection
+
+@push('scripts')
+<script>
+    // Script untuk menampilkan nama file pada input file Bulma
+    document.querySelectorAll('.file-input').forEach(input => {
+        input.onchange = () => {
+            if (input.files.length > 0) {
+                const fileName = input.closest('.file').querySelector('.file-name');
+                fileName.textContent = input.files[0].name;
+            }
+        }
+    });
+
+    // Script untuk menutup notifikasi
+    document.querySelectorAll('.notification .delete').forEach(($delete) => {
+        const $notification = $delete.parentNode;
+        $delete.addEventListener('click', () => {
+            $notification.parentNode.removeChild($notification);
+        });
+    });
+</script>
+@endpush

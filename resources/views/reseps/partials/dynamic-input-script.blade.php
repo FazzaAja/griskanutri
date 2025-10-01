@@ -6,8 +6,14 @@ document.addEventListener('click', function(e) {
         const newItem = document.createElement('div');
         newItem.classList.add('input-group', 'mb-2');
         newItem.innerHTML = `
-            <input type="text" name="${name}[]" class="form-control" required>
-            <button class="btn btn-outline-danger remove-item-btn" type="button">Hapus</button>
+            <div class="field has-addons mb-2">
+                <div class="control is-expanded">
+                    <input type="text" name="${name}[]" class="input" required>
+                </div>
+                <div class="control">
+                    <button class="button is-danger remove-item-btn" type="button">Hapus</button>
+                </div>
+            </div>
         `;
         wrapper.appendChild(newItem);
     }

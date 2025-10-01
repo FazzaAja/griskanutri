@@ -3,53 +3,86 @@
 @section('title', 'Hasil Kuis')
 
 @section('content')
-<div class="card">
-    <div class="card-header text-center">
-        <h3>Hasil Kuis: {{ $results['materi_judul'] }}</h3>
+    {{-- Header Halaman --}}
+    <div class="content-header">
+        <h4 class="title is-4">Hasil Kuis</h4>
+        <span class="separator"></span>
+        <nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
+            <ul>
+                <li><a href="{{ route('materis.index') }}">Materi</a></li>
+                <li><a href="{{ route('materis.show', $results['materi_slug']) }}">{{ Str::limit($results['materi_judul'], 25) }}</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Hasil</a></li>
+            </ul>
+        </nav>
     </div>
-    <div class="card-body">
-        <div class="text-center mb-4">
-            <h1 class="display-3">Skor Anda</h1>
-            <h1 class="display-1 fw-bold {{ $results['score'] >= 75 ? 'text-success' : 'text-danger' }}">
-                {{ $results['score'] }}
-            </h1>
-            <p class="fs-4">
+
+    {{-- Konten Utama --}}
+    <div class="content-body">
+
+        {{-- Kotak Skor Utama --}}
+        <div class="notification {{ $results['score'] >= 75 ? 'is-success' : 'is-danger' }} has-text-centered">
+            <p class="title is-3">Skor Anda</p>
+            <p class="title is-1 has-text-weight-bold">{{ $results['score'] }}</p>
+            <p class="subtitle is-5">
                 Anda berhasil menjawab <strong>{{ $results['correct_answers'] }}</strong> dari <strong>{{ $results['total_questions'] }}</strong> soal dengan benar.
             </p>
         </div>
 
-        <hr>
+        <h4 class="title is-4 mt-6">Rincian Jawaban</h4>
 
-        <h4 class="mt-4">Rincian Jawaban:</h4>
-
+        {{-- Loop untuk Rincian Jawaban --}}
         @foreach($results['results_data'] as $index => $result)
-            <div class="mb-3 p-3 border rounded {{ $result['is_correct'] ? 'border-success' : 'border-danger' }}">
-                <p class="fw-bold">Soal #{{ $index + 1 }}: {{ $result['pertanyaan'] }}</p>
+            {{-- Komponen 'message' untuk setiap soal --}}
+            <article class="message {{ $result['is_correct'] ? 'is-success' : 'is-danger' }}">
+                <div class="message-header">
+                    <p>Soal #{{ $index + 1 }}: {{ $result['pertanyaan'] }}</p>
+                </div>
+                <div class="message-body content">
+                    <ul>
+                        @foreach($result['opsi'] as $key => $option)
+                            @php
+                                $isUserAnswer = ($key == $result['jawaban_user']);
+                                $isCorrectAnswer = ($key == $result['jawaban_benar']);
+                                $class = '';
+                                if ($isUserAnswer && !$result['is_correct']) {
+                                    $class = 'has-text-danger has-text-weight-bold'; // Jawaban user yang salah
+                                } elseif ($isCorrectAnswer) {
+                                    $class = 'has-text-success has-text-weight-bold'; // Jawaban yang benar
+                                }
+                            @endphp
+                            <li class="{{ $class }}">
+                                {{ $key }}. {{ $option }}
 
-                @foreach($result['opsi'] as $key => $option)
-                    @php
-                        $isUserAnswer = ($key == $result['jawaban_user']);
-                        $isCorrectAnswer = ($key == $result['jawaban_benar']);
-                        $class = '';
-                        if ($isUserAnswer && !$result['is_correct']) {
-                            $class = 'text-danger fw-bold'; // Jawaban user yang salah
-                        } elseif ($isCorrectAnswer) {
-                            $class = 'text-success fw-bold'; // Jawaban yang benar
-                        }
-                    @endphp
-                    <p class="{{ $class }}">
-                        {{ $key }}. {{ $option }}
-                        @if($isUserAnswer && !$result['is_correct']) <span>(Jawaban Anda)</span> @endif
-                        @if($isCorrectAnswer) <span>(Jawaban Benar)</span> @endif
-                    </p>
-                @endforeach
-            </div>
+                                @if ($isCorrectAnswer)
+                                    <span class="icon is-small has-text-success"><i class="fa fa-check"></i></span>
+                                    <em class="is-size-7">(Jawaban Benar)</em>
+                                @endif
+
+                                @if ($isUserAnswer && !$result['is_correct'])
+                                     <span class="icon is-small has-text-danger"><i class="fa fa-times"></i></span>
+                                     <em class="is-size-7">(Jawaban Anda)</em>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </article>
         @endforeach
 
-        <div class="text-center mt-4">
-            <a href="{{ route('materis.index') }}" class="btn btn-secondary">Kembali ke Daftar Materi</a>
-            <a href="{{ route('materis.quiz', Request::segment(2)) }}" class="btn btn-primary">Coba Lagi Kuis Ini</a>
+        {{-- Tombol Aksi di Bagian Bawah --}}
+        <div class="field is-grouped is-grouped-centered mt-5">
+            <p class="control">
+                <a href="{{ route('materis.index') }}" class="button is-light">
+                    <span class="icon"><i class="fa fa-arrow-left"></i></span>
+                    <span>Kembali ke Daftar Materi</span>
+                </a>
+            </p>
+            <p class="control">
+                <a href="{{ route('materis.quiz', $results['materi_slug']) }}" class="button is-primary">
+                    <span class="icon"><i class="fa fa-redo"></i></span>
+                    <span>Coba Lagi Kuis Ini</span>
+                </a>
+            </p>
         </div>
     </div>
-</div>
 @endsection

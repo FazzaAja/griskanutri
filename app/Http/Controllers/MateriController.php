@@ -198,6 +198,7 @@ class MateriController extends Controller
         // 6. Simpan seluruh hasil ke dalam session
         session()->put('quiz_results', [
             'materi_judul' => $materi->judul,
+            'materi_slug' => $materi->slug,
             'score' => round($score),
             'correct_answers' => $correctAnswers,
             'total_questions' => $totalQuestions,

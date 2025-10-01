@@ -3,45 +3,56 @@
 @section('title', 'Detail Soal')
 
 @section('content')
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h3>Detail Soal</h3>
-        <a class="btn btn-secondary" href="{{ route('materis.soals.index', $materi->slug) }}"> Kembali</a>
-    </div>
-    <div class="card-body">
-        <div class="mb-3">
-            <strong>Materi Induk:</strong>
-            <p>{{ $materi->judul }}</p>
-        </div>
-        <hr>
-        <div class="mb-3">
-            <strong>Pertanyaan:</strong>
-            <p class="fs-5">{{ $soal->pertanyaan }}</p>
-        </div>
-        <hr>
-        @if($soal->img)
-            <div class="mb-3">
-                <strong>Gambar:</strong><br>
-                <img src="{{ asset('images/soal/' . $soal->img) }}" alt="Gambar Soal" class="img-fluid rounded" style="max-width: 400px;">
-            </div>
-            <hr>
-        @endif
-        <div class="mb-3">
-            <strong>Opsi Jawaban:</strong>
-            <ul class="list-group">
-                @foreach($soal->opsi as $key => $option)
-                    <li class="list-group-item {{ $key == $soal->jawaban ? 'list-group-item-success' : '' }}">
-                        <strong>{{ $key }}.</strong> {{ $option }}
-                        @if($key == $soal->jawaban)
-                            <span class="badge bg-success float-end">Jawaban Benar</span>
-                        @endif
-                    </li>
-                @endforeach
+    <div class="content-header">
+        <h4 class="title is-4">Detail Soal</h4>
+        <span class="separator"></span>
+        <nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
+             <ul>
+                <li><a href="{{ route('materis.index') }}">Materi</a></li>
+                <li><a href="{{ route('materis.soals.index', $materi->slug) }}">Daftar Soal</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Detail Soal</a></li>
             </ul>
+        </nav>
+    </div>
+
+    <div class="content-body">
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <p class="subtitle is-6">Materi Induk: <strong>{{ $materi->judul }}</strong></p>
+                    <hr>
+                    <h5 class="title is-5">Pertanyaan:</h5>
+                    <p>{{ $soal->pertanyaan }}</p>
+
+                    @if($soal->img)
+                        <hr>
+                        <h5 class="title is-5">Gambar:</h5>
+                        <figure class="image" style="max-width: 400px;">
+                            <img src="{{ asset('storage/images/soal/' . $soal->img) }}" alt="Gambar Soal">
+                        </figure>
+                    @endif
+
+                    <hr>
+                    <h5 class="title is-5">Opsi Jawaban:</h5>
+                    <div class="tags are-medium">
+                        @foreach($soal->opsi as $key => $option)
+                            <span class="tag {{ $key == $soal->jawaban ? 'is-success' : 'is-light' }}">
+                                <strong>{{ $key }}.</strong> &nbsp; {{ $option }}
+                            </span>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <footer class="card-footer">
+                <a href="{{ route('materis.soals.index', $materi->slug) }}" class="card-footer-item">
+                    <span class="icon is-small"><i class="fa fa-arrow-left"></i></span>
+                    <span>Kembali ke Daftar Soal</span>
+                </a>
+                <a href="{{ route('materis.soals.edit', [$materi->slug, $soal->id_soal]) }}" class="card-footer-item">
+                     <span class="icon is-small"><i class="fa fa-edit"></i></span>
+                     <span>Edit Soal Ini</span>
+                </a>
+            </footer>
         </div>
     </div>
-    <div class="card-footer text-end">
-        <a class="btn btn-primary" href="{{ route('materis.soals.edit', [$materi->slug, $soal->id_soal]) }}">Edit Soal Ini</a>
-    </div>
-</div>
 @endsection

@@ -56,11 +56,11 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{{ route('kurikulum.index') }}">Kurikulum & Materi</a></li>
                                 <li><a href="{{ route('resep.index') }}">Resep Sehat</a></li>
-                                <li><a href="#">Statistik Stunting</a></li>
+                                <li><a href="{{ route('stunting.form') }}">Kalkulator Stunting</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#contact" class="nav-link">Contact</a>
+                            <a href="#footer" class="nav-link">Contact</a>
                         </li>
                         @auth
                             {{-- Tampil jika pengguna sudah login --}}
